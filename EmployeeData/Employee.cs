@@ -21,6 +21,6 @@ namespace EmployeeData
         public string MobileNo { get; set; }
         public string emailId { get; set; }
         public string Doj { get; set; }
-        public string Pass { get; set; }
+        public string Password { get; set; }
     }
 }
