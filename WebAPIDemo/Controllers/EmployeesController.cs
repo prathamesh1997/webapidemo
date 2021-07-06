@@ -58,9 +58,9 @@ namespace WebAPIDemo.Controllers
             {
                 using (EmployeeDBEntities entities = new EmployeeDBEntities())
                 {
+                    employee.Password = EncodePasswordToBase64(employee.Password);
                     entities.Employees.Add(employee);
                     entities.SaveChanges();
-
                     var message = Request.CreateResponse(HttpStatusCode.Created, employee);
                     message.Headers.Location = new Uri(Request.RequestUri +
                         employee.ID.ToString());
