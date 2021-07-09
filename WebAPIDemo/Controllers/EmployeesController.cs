@@ -56,17 +56,25 @@ namespace WebAPIDemo.Controllers
         {
             try
             {
-                using (EmployeeDBEntities entities = new EmployeeDBEntities())
+                if (ModelState.IsValid)
                 {
-                    employee.Password = EncodePasswordToBase64(employee.Password);
-                    entities.Employees.Add(employee);
-                    entities.SaveChanges();
-                    var message = Request.CreateResponse(HttpStatusCode.Created, employee);
-                    message.Headers.Location = new Uri(Request.RequestUri +
-                        employee.ID.ToString());
+                    using (EmployeeDBEntities entities = new EmployeeDBEntities())
+                    {
+                        employee.Password = EncodePasswordToBase64(employee.Password);
+                        entities.Employees.Add(employee);
+                        entities.SaveChanges();
+                        var message = Request.CreateResponse(HttpStatusCode.Created, employee);
+                        message.Headers.Location = new Uri(Request.RequestUri +
+                            employee.ID.ToString());
 
-                    return message;
+                        return message;
+                    }
                 }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                }
+               
             }
             catch (Exception ex)
             {

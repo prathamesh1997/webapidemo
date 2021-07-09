@@ -11,7 +11,8 @@ namespace EmployeeData
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Employee
     {
         public int ID { get; set; }
@@ -19,8 +20,11 @@ namespace EmployeeData
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string MobileNo { get; set; }
+        [EmailAddress]
         public string emailId { get; set; }
-        public string Doj { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:DD-MM-yyyy}")]
+        public DateTime Doj { get; set; }
+        [MinLength(8),MaxLength(16)]
         public string Password { get; set; }
     }
 }
