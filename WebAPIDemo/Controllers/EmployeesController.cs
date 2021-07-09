@@ -86,28 +86,38 @@ namespace WebAPIDemo.Controllers
         {
             try
             {
-                using (EmployeeDBEntities entities = new EmployeeDBEntities())
+
+                if (ModelState.IsValid)
                 {
-                    var entity = entities.Employees.FirstOrDefault(e => e.ID == id);
-                    if (entity == null)
+                    using (EmployeeDBEntities entities = new EmployeeDBEntities())
                     {
-                        return Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                            "Employee with Id " + id.ToString() + " not found to update");
-                    }
-                    else
-                    {
-                        entity.FirstName = employee.FirstName;
-                        entity.LastName = employee.LastName;
-                        entity.emailId = employee.emailId;
-                        entity.MiddleName = employee.MiddleName;
-                        entity.MobileNo = employee.MobileNo;
-                        entity.Doj = employee.Doj;
-                        entity.Password = EncodePasswordToBase64(employee.Password);
 
-                        entities.SaveChanges();
+                        var entity = entities.Employees.FirstOrDefault(e => e.ID == id);
+                        if (entity == null)
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                                "Employee with Id " + id.ToString() + " not found to update");
+                        }
+                        else
+                        {
+                            entity.FirstName = employee.FirstName;
+                            entity.LastName = employee.LastName;
+                            entity.emailId = employee.emailId;
+                            entity.MiddleName = employee.MiddleName;
+                            entity.MobileNo = employee.MobileNo;
+                            entity.Doj = employee.Doj;
+                            entity.Password = EncodePasswordToBase64(employee.Password);
 
-                        return Request.CreateResponse(HttpStatusCode.OK, entity);
+                            entities.SaveChanges();
+
+                            return Request.CreateResponse(HttpStatusCode.OK, entity);
+                        }
                     }
+
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
                 }
             }
             catch (Exception ex)
